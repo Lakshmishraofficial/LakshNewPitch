@@ -2,12 +2,13 @@
 <html>
 <head>
 	<title>Note Detector</title>
+	<!-- Link to aubio.min.js file -->
+	<script src="https://cdn.jsdelivr.net/npm/aubiojs@0.3.0/dist/aubio.min.js"></script>
 </head>
 <body>
 	<h1>Note Detector</h1>
 	<input type="file" accept="audio/*" onchange="processAudio(this.files)">
 	<div id="note-display"></div>
-	<script src="aubio.min.js"></script>
 	<script>
 		function processAudio(files) {
 			const reader = new FileReader();
