@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Note Detector</title>
+</head>
+<body>
+	<h1>Note Detector</h1>
+	<input type="file" accept="audio/*" onchange="processAudio(this.files)">
+	<div id="note-display"></div>
+	<script src="aubio.min.js"></script>
+	<script>
+		function processAudio(files) {
+			const reader = new FileReader();
+			reader.onload = function(event) {
+				const arrayBuffer = event.target.result;
+				aubio().then(function(aubio) {
+					const source = new aubio.source(arrayBuffer);
+					const sampleRate = source.getSampleRate();
+					const notes = [];
+					while (source.getDuration()) {
+						const buffer = source.nextBuffer(1024);
+						const frequency = aubio.pitch(buffer, buffer.length);
+						notes.push(frequency);
+					}
+					const noteDisplay = document.getElementById('note-display');
+					noteDisplay.innerText = `Detected ${notes.length} notes: ${notes.join(', ')}`;
+				});
+			}
+			reader.readAsArrayBuffer(files[0]);
+		}
+	</script>
+</body>
+</html>
